@@ -22,7 +22,7 @@ public class ConfiguratorApp extends AppSupport {
 			timer.scheduleAtFixedRate(new ConfigSenderTimerTask(this, configSender), configSender.getPeriod(), configSender.getPeriod());
 
 			infoMessage("client.configurator.sender.loadsuccess");
-			infoMessage("client.configurator.sender.parameter", configSender.getAddress() + ":" + configSender.getPort(), configSender.getPeriod());
+			infoMessage("client.configurator.sender.parameter", configSender.getAddress(), configSender.getPort(), configSender.getPeriod());
 		} else {
 			errorMessage("client.configurator.sender.loadfailed");
 		}
