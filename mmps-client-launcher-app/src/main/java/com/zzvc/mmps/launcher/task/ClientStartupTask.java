@@ -1,7 +1,8 @@
 package com.zzvc.mmps.launcher.task;
 
+import java.io.IOException;
+
 import com.zzvc.mmps.launcher.startup.ClientStartup;
-import com.zzvc.mmps.launcher.startup.StartupException;
 import com.zzvc.mmps.task.TaskSupport;
 
 public class ClientStartupTask extends TaskSupport {
@@ -29,7 +30,7 @@ public class ClientStartupTask extends TaskSupport {
 		try {
 			clientStartup.startup();
 			infoMessage("client.launcher.startup.startsuccess");
-		} catch (StartupException e) {
+		} catch (IOException e) {
 			errorMessage("client.launcher.startup.startfailed");
 		}
 	}

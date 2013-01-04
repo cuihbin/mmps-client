@@ -11,14 +11,9 @@ import org.apache.log4j.Logger;
 public class ClientStartup {
 	private static Logger logger = Logger.getLogger(ClientStartup.class);
 	
-	public void startup() {
-		try {
-			Process proc = Runtime.getRuntime().exec("cmd /c startup.bat", null, new File("bin"));
-			waitForProcessToTerminate(proc);
-		} catch (IOException e) {
-			logger.error("Error startup client", e);
-			throw new StartupException("Error startup client", e);
-		}
+	public void startup() throws IOException {
+		Process proc = Runtime.getRuntime().exec("cmd /c startup.bat", null, new File("bin"));
+		waitForProcessToTerminate(proc);
 	}
 	
 	private void waitForProcessToTerminate(Process proc) {
