@@ -36,7 +36,7 @@ public class UpdateIndexImpl extends ConsoleMessageSupport implements UpdateInde
 		
 		baseDir = new java.io.File(UPDATE_DIR);
 		if (!baseDir.exists() || !baseDir.isDirectory()) {
-			errorMessage("client.updater.index.nodir");
+			errorMessage("client.updater.index.error.nodir", UPDATE_DIR);
 			return;
 		}
 		
