@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <parent>
+    <groupId>com.zzvc.mmps</groupId>
+    <artifactId>mmps-parent</artifactId>
+    <version>6-SNAPSHOT</version>
+  </parent>
+
+  <modelVersion>4.0.0</modelVersion>
+  <artifactId>mmps-client</artifactId>
+  <version>1.2.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <name>mmps-client</name>
+
+  <properties>
+    <mmps-core.version>1.2.0-SNAPSHOT</mmps-core.version>
+    <mmps-remoting.version>1.2.0-SNAPSHOT</mmps-remoting.version>
+    <mmps-utils.version>1.2.0-SNAPSHOT</mmps-utils.version>
+  </properties>
+
+  <scm>
+    <connection>scm:svn:svn://localhost/com.zzvc.mmps/mmps-client-run/trunk</connection>
+    <developerConnection>scm:svn:svn://localhost/com.zzvc.mmps/mmps-client-run/trunk</developerConnection>
+    <url></url>
+  </scm>
+
+  <modules>
+    <module>mmps-client-configurator-app</module>
+    <module>mmps-client-configurator-common</module>
+    <module>mmps-client-launcher-app</module>
+    <module>mmps-client-updater-common</module>
+  </modules>
+
+</project>

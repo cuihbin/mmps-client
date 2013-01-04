@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <parent>
+    <groupId>com.zzvc.mmps</groupId>
+    <artifactId>mmps-client</artifactId>
+    <version>1.2.0-SNAPSHOT</version>
+  </parent>
+
+  <modelVersion>4.0.0</modelVersion>
+  <artifactId>mmps-client-configurator-app</artifactId>
+  <name>mmps-client-configurator-app</name>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.zzvc.mmps</groupId>
+      <artifactId>mmps-client-configurator-common</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+	<!-- MMPS Core dependencies -->
+    <dependency>
+      <groupId>com.zzvc.mmps</groupId>
+      <artifactId>mmps-app</artifactId>
+      <version>${mmps-core.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.zzvc.mmps</groupId>
+      <artifactId>mmps-gui</artifactId>
+      <version>${mmps-core.version}</version>
+    </dependency>
+
+	<!-- MMPS Player dependencies -->
+    <dependency>
+      <groupId>com.zzvc.mmps</groupId>
+      <artifactId>mmps-remoting-server-client</artifactId>
+      <version>${mmps-remoting.version}</version>
+    </dependency>
+  </dependencies>
+</project>
