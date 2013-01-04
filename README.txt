@@ -1,0 +1,1 @@
+Client supporting modules and applications include configuring, updating and launching

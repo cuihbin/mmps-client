@@ -18,11 +18,11 @@ import com.zzvc.mmps.updater.digest.ChecksumUtil;
 public class UpdateIndexImpl extends ConsoleMessageSupport implements UpdateIndex {
 	private static Logger logger = Logger.getLogger(UpdateIndexImpl.class);
 	
-	private static final String UPDATE_DIR = "update";
+	private String updateDir;
+	private String checksumType;
 	
 	private java.io.File baseDir;
 	
-	private String checksumType;
 	public UpdateIndexImpl() {
 		super();
 		pushBundle("ClientUpdaterResources");
@@ -32,11 +32,13 @@ public class UpdateIndexImpl extends ConsoleMessageSupport implements UpdateInde
 	public void create() {
 		infoMessage("client.updater.index.starting");
 		
-		checksumType = ResourceBundle.getBundle("updater").getString("client.updater.checksumtype");
+		ResourceBundle bundle = ResourceBundle.getBundle("updater");
+		updateDir = bundle.getString("client.updater.updatedir");
+		checksumType = bundle.getString("client.updater.checksumtype");
 		
-		baseDir = new java.io.File(UPDATE_DIR);
+		baseDir = new java.io.File(updateDir);
 		if (!baseDir.exists() || !baseDir.isDirectory()) {
-			errorMessage("client.updater.index.error.nodir", UPDATE_DIR);
+			errorMessage("client.updater.index.error.nodir", updateDir);
 			return;
 		}
 		
