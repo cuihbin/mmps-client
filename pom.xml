@@ -16,19 +16,19 @@
   <properties>
     <mmps-core.version>1.2.0-SNAPSHOT</mmps-core.version>
     <mmps-remoting.version>1.2.0-SNAPSHOT</mmps-remoting.version>
-    <mmps-utils.version>1.2.0-SNAPSHOT</mmps-utils.version>
   </properties>
 
   <scm>
-    <connection>scm:svn:svn://localhost/com.zzvc.mmps/mmps-client-run/trunk</connection>
-    <developerConnection>scm:svn:svn://localhost/com.zzvc.mmps/mmps-client-run/trunk</developerConnection>
-    <url></url>
+    <connection>scm:git:git@github.com:cuihbin/mmps-client.git</connection>
+    <developerConnection>scm:git:git@github.com:cuihbin/mmps-client.git</developerConnection>
+    <url>https://github.com/cuihbin</url>
   </scm>
 
   <modules>
     <module>mmps-client-configurator-app</module>
     <module>mmps-client-configurator-common</module>
     <module>mmps-client-launcher-app</module>
+    <module>mmps-client-updater-app</module>
     <module>mmps-client-updater-common</module>
   </modules>
 
