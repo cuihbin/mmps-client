@@ -9,8 +9,4 @@ public class ClientUpdaterApp extends AppSupport {
 		pushBundle("ClientUpdaterResources");
 	}
 
-	@Override
-	public void init() {
-	}
-
 }
