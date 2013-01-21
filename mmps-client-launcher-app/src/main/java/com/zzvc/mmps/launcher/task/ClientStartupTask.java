@@ -2,6 +2,8 @@ package com.zzvc.mmps.launcher.task;
 
 import java.io.IOException;
 
+import sun.misc.Signal;
+
 import com.zzvc.mmps.launcher.startup.ClientStartup;
 import com.zzvc.mmps.task.TaskSupport;
 
@@ -30,6 +32,7 @@ public class ClientStartupTask extends TaskSupport {
 		try {
 			clientStartup.startup();
 			infoMessage("client.launcher.startup.startsuccess");
+			Signal.raise(new Signal("TERM"));
 		} catch (IOException e) {
 			errorMessage("client.launcher.startup.startfailed");
 		}
