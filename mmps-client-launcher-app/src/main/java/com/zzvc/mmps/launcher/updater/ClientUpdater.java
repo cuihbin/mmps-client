@@ -9,14 +9,18 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.vfs2.FileContent;
+import org.apache.commons.vfs2.FileSystemException;
 import org.apache.commons.vfs2.VFS;
 import org.apache.log4j.Logger;
 import org.apache.xmlbeans.XmlException;
@@ -35,17 +39,14 @@ public class ClientUpdater {
 
 	private static final String UPDATE_REVISION_CACHE_FILE = "update.lastUpdate";
 	
-	private static final int UPDATE_FILE_DOWNLOAD_RETRY = 1;
+	private static final int UPDATE_FILE_DOWNLOAD_RETRY = 3;
 	
 	private String updateUrl;
 	
 	private Update updateDoc;
 
-	public ClientUpdater(String updateUrl) {
-		this.updateUrl = updateUrl;
-		if (!updateUrl.endsWith("/")) {
-			this.updateUrl += "/";
-		}
+	public ClientUpdater(ResourceBundle configResource) {
+		this.updateUrl = loadUpdateUrl(configResource);
 	}
 	
 	public boolean verifyUpdate() {
@@ -59,6 +60,18 @@ public class ClientUpdater {
 			update(dirDoc);
 		}
 		saveLastUpdate(updateDoc.getRevision());
+	}
+	
+	private String loadUpdateUrl(ResourceBundle configResource) {
+		String updateUrl = null;
+		try {
+			updateUrl = configResource.getString("client.update.url") + "/";
+			return new URI(updateUrl).normalize().toString();
+		} catch (MissingResourceException e) {
+			throw new UpdateServerConnectionException("Update url configure not found", e);
+		} catch (URISyntaxException e) {
+			throw new UpdateServerConnectionException("Cannot parse update url " + updateUrl, e);
+		}
 	}
 
 	private UpdateDocument parseUpdateIndexFromUrl(String url) {
@@ -137,29 +150,21 @@ public class ClientUpdater {
 	}
 	
 	private java.io.File update(Dir dirDoc, File fileDoc) {
-		String fileUrl = getUpdateFileUrl(dirDoc, fileDoc);
-		java.io.File dir = new java.io.File(dirDoc.getName());
-		java.io.File file = new java.io.File(dir, fileDoc.getName());
+		String remoteFileUrl = getUpdateFileUrl(dirDoc, fileDoc);
+		java.io.File localFile = getLocalFile(dirDoc, fileDoc);
 		
-		if (verifyFile(fileDoc, file)) {
-			return file;
+		if (verifyFile(fileDoc, localFile)) {
+			return localFile;
 		}
 		
 		int retryCount = UPDATE_FILE_DOWNLOAD_RETRY;
 		while ((retryCount--) > 0) {
-			try {
-				downloadFileFromInputStream(fileUrl, file);
-				if (verifyFile(fileDoc, file)) {
-					return file;
-				}
-			} catch (FileNotFoundException e) {
-				logger.error("Error updating file " + file.getAbsolutePath(), e);
-			} catch (IOException e) {
-				logger.error("Error downloading file from " + fileUrl, e);
+			if (downloadFileFromUrl(remoteFileUrl, localFile) && verifyFile(fileDoc, localFile)) {
+				return localFile;
 			}
 		}
 		
-		throw new UpdateFileException("Cannot update file from " + fileUrl);
+		throw new UpdateFileException("Cannot update file from " + remoteFileUrl);
 	}
 	
 	private boolean verifyFile(File fileDoc, java.io.File file) {
@@ -174,7 +179,10 @@ public class ClientUpdater {
 	}
 	
 	private boolean verifyTimestamp(File fileDoc, java.io.File file) {
-		return IndexTimestampUtil.checkTimestamp(fileDoc.getTimestamp(), file.lastModified());
+		if (!IndexTimestampUtil.checkTimestamp(fileDoc.getTimestamp(), file.lastModified())) {
+			logger.warn("Timestamp not match for file " + file.getName());
+		}
+		return true;
 	}
 	
 	private boolean verifySize(File fileDoc, java.io.File file) {
@@ -206,21 +214,38 @@ public class ClientUpdater {
 		return updateUrl + dirDoc.getName() + "/" + fileDoc.getName();
 	}
 	
-	private void downloadFileFromInputStream(String url, java.io.File file) throws FileNotFoundException, IOException {
-		FileContent content = VFS.getManager().resolveFile(url).getContent();
-		OutputStream os = null;
-		try {
-			os = new FileOutputStream(file);
-			IOUtils.copy(content.getInputStream(), os);
-		} finally {
-			if (os != null) {
-				try {
-					os.close();
-				} catch (IOException e) {
-				}
-			}
-		}
-		file.setLastModified(content.getLastModifiedTime());
+	private java.io.File getLocalFile(Dir dirDoc, File fileDoc) {
+		return new java.io.File(new java.io.File(dirDoc.getName()), fileDoc.getName());
 	}
 	
+	private boolean downloadFileFromUrl(String url, java.io.File file) {
+		FileContent content = null;
+		java.io.File tempFile = null;
+		OutputStream os = null;
+		try {
+			content = VFS.getManager().resolveFile(url).getContent();
+			tempFile = java.io.File.createTempFile("temp-", ".tmp");
+			os = new FileOutputStream(tempFile);
+			IOUtils.copy(content.getInputStream(), os);
+		} catch (FileNotFoundException e) {
+			logger.error("Error accessing local file", e);
+			return false;
+		} catch (IOException e) {
+			logger.error("Error downloading file from " + url, e);
+			return false;
+		} finally {
+			IOUtils.closeQuietly(os);
+		}
+		
+		if (file.exists() && !file.delete() || !file.getParentFile().exists() && !file.getParentFile().mkdirs()) {
+			return false;
+		}
+		
+		try {
+			return tempFile.renameTo(file) && file.setLastModified(content.getLastModifiedTime());
+		} catch (FileSystemException e) {
+			logger.error("Error setting file timestamp", e);
+			return false;
+		}
+	}
 }

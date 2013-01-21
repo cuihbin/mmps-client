@@ -34,8 +34,8 @@ public class ClientUpdaterTask extends TaskSupport {
 	public void init() {
 		infoMessage("client.launcher.updater.updating");
 		
-		ClientUpdater clientUpdater = new ClientUpdater(configResource.getString("config.update.url"));
 		try {
+			ClientUpdater clientUpdater = new ClientUpdater(configResource);
 			if (!clientUpdater.verifyUpdate()) {
 				clientUpdater.update();
 			} else {
