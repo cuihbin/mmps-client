@@ -4,7 +4,7 @@
   <parent>
     <groupId>com.zzvc.mmps</groupId>
     <artifactId>mmps-parent</artifactId>
-    <version>6</version>
+    <version>2.0.2</version>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
@@ -14,8 +14,8 @@
   <name>mmps-client</name>
 
   <properties>
-    <mmps-core.version>2.0</mmps-core.version>
-    <mmps-remoting.version>2.0</mmps-remoting.version>
+    <mmps-core.version>2.1</mmps-core.version>
+    <mmps-remoting.version>2.1</mmps-remoting.version>
   </properties>
 
   <scm>

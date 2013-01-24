@@ -2,4 +2,5 @@ mmps-client-2.0
  + Improved client updater
  + Client download lib changed to commons-vfs
  + Improved configurator logic
- + Improved updateer logic
+ + Improved updater logic
+ + Change to mmps-parent 2.0.2
