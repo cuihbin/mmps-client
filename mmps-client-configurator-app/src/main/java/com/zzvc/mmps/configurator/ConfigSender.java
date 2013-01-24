@@ -7,8 +7,6 @@ import java.io.InputStream;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
-import java.net.SocketException;
-import java.net.UnknownHostException;
 
 import org.apache.log4j.Logger;
 
@@ -20,17 +18,13 @@ public class ConfigSender extends MulticastBase {
 	private DatagramPacket packet = null;
 	
 	public boolean initSender() {
-		if (!initMulticast()) {
-			return false;
-		}
 		
 		try {
-			msocket.setNetworkInterface(NetworkInterface.getByInetAddress(InetAddress.getLocalHost()));
-		} catch (SocketException e) {
-			logger.error("Error setting local network interface.", e);
-			return false;
-		} catch (UnknownHostException e) {
-			logger.error("Error setting local network interface.", e);
+			if (initMulticast()) {
+				msocket.setNetworkInterface(NetworkInterface.getByInetAddress(InetAddress.getLocalHost()));
+			}
+		} catch (IOException e) {
+			logger.error("Error initializing multicast.", e);
 			return false;
 		}
 		

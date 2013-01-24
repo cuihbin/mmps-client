@@ -8,7 +8,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.DatagramPacket;
-import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
@@ -83,14 +82,12 @@ public class ConfigReceiver extends MulticastBase {
 			return true;
 		}
 		
-		if (!initMulticast()) {
-			return false;
-		}
-		
 		try {
-			msocket.setSoTimeout(getPeriod() * 2);
-		} catch (SocketException e) {
-			logger.error("Error setting multicast socket timeout", e);
+			if (initMulticast()) {
+				msocket.setSoTimeout(getPeriod() * 2);
+			}
+		} catch (IOException e) {
+			logger.error("Error initializing multicast.", e);
 			return false;
 		}
 		
