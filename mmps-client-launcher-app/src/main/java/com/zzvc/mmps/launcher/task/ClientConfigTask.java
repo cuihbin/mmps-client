@@ -1,7 +1,5 @@
 package com.zzvc.mmps.launcher.task;
 
-import java.util.ResourceBundle;
-
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.zzvc.mmps.launcher.configurator.ConfigException;
@@ -30,11 +28,10 @@ public class ClientConfigTask extends TaskSupport {
 			warnMessage("client.launcher.configurator.warn.receiving");
 		}
 		
-		ResourceBundle clientResource = configReceiver.getConfigResource();
-		if (clientResource != null) {
+		try {
 			autoUpdateTask.setConfigResource(configReceiver.getConfigResource());
 			infoMessage("client.launcher.configurator.loadsuccess");
-		} else {
+		} catch (ConfigException e) {
 			errorMessage("client.launcher.configurator.error.loadfailed");
 		}
 	}
