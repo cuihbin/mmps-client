@@ -19,11 +19,8 @@ public class ConfigSender extends MulticastBase {
 	
 	public boolean initSender() {
 		try {
-			if (initMulticast()) {
-				socket = new DatagramSocket();
-			} else  {
-				return false;
-			}
+			initMulticast();
+			socket = new DatagramSocket();
 		} catch (IOException e) {
 			logger.error("Error initializing multicast.", e);
 			return false;

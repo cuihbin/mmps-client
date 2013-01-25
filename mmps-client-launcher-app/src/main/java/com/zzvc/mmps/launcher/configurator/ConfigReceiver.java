@@ -38,16 +38,13 @@ public class ConfigReceiver extends MulticastBase {
 	
 	private void initReceiver() {
 		try {
-			if (!initMulticast()) {
-				return;
-			}
-			
 			try {
 				configResource = new PropertyResourceBundle(new FileReader(getConfigPath()));
 			} catch (FileNotFoundException e) {
 			} catch (IOException e) {
 			}
 			
+			initMulticast();
 			socket = new MulticastSocket(getPort());
 			socket.joinGroup(group);
 			socket.setSoTimeout(getPeriod() * 2);
