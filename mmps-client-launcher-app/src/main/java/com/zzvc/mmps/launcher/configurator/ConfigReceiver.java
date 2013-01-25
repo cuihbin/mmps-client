@@ -10,9 +10,9 @@ import java.util.ResourceBundle;
 
 import org.apache.log4j.Logger;
 
-import com.zzvc.mmps.multicast.MulticastBase;
+import com.zzvc.mmps.configurator.ConfigBase;
 
-public class ConfigReceiver extends MulticastBase {
+public class ConfigReceiver extends ConfigBase {
 	private static Logger logger = Logger.getLogger(ConfigReceiver.class);
 	
 	private static final int MULTICAST_READ_BUFFER_SIZE = 8192;
@@ -27,7 +27,7 @@ public class ConfigReceiver extends MulticastBase {
 	
 	public ResourceBundle getConfigResource() {
 		try {
-			return new PropertyResourceBundle(new FileReader(getConfigPath()));
+			return new PropertyResourceBundle(new FileReader(getConfigUtil().getConfigFile()));
 		} catch (IOException e) {
 			logger.error("Error loading config", e);
 			throw new ConfigException("Error loading config", e);
@@ -36,7 +36,7 @@ public class ConfigReceiver extends MulticastBase {
 	
 	private void initReceiver() {
 		try {
-			initMulticast();
+			initConfig();
 			socket = new MulticastSocket(getPort());
 			socket.joinGroup(getGroup());
 			socket.setSoTimeout(getPeriod() * 2);
@@ -68,7 +68,7 @@ public class ConfigReceiver extends MulticastBase {
 		}
 		
 		try {
-			writeConfig(packet.getData(), packet.getLength());
+			getConfigUtil().writeConfig(packet.getData(), packet.getLength());
 			return true;
 		} catch (IOException e) {
 			logger.info("Error writing multicast data to file.", e);
