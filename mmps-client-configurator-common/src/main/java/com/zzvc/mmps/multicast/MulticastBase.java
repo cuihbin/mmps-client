@@ -2,11 +2,9 @@ package com.zzvc.mmps.multicast;
 
 import java.io.IOException;
 import java.net.InetAddress;
-import java.net.MulticastSocket;
 import java.util.ResourceBundle;
 
 abstract public class MulticastBase {
-	protected MulticastSocket msocket = null;
 	protected InetAddress group = null;
 	
 	protected static ResourceBundle bundle = null;
@@ -23,10 +21,9 @@ abstract public class MulticastBase {
 		address = bundle.getString("multicast.address");
 		port = Integer.parseInt(bundle.getString("multicast.port"));
 		configPath = bundle.getString("config.path");
+		period = Integer.parseInt(bundle.getString("config.period"));
+
 		initMulticastConfig = true;
-		
-		String configPeriod = bundle.getString("config.period");
-		period = Integer.parseInt(configPeriod);
 	}
 
 	public int getPeriod() {
@@ -50,10 +47,7 @@ abstract public class MulticastBase {
 			return false;
 		}
 		
-		msocket = new MulticastSocket(port);
 		group = InetAddress.getByName(address);
-		msocket.joinGroup(group);
-		
 		return true;
 	}
 

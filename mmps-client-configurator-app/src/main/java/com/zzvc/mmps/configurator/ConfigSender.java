@@ -5,8 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.DatagramPacket;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
+import java.net.DatagramSocket;
 
 import org.apache.log4j.Logger;
 
@@ -15,13 +14,15 @@ import com.zzvc.mmps.multicast.MulticastBase;
 public class ConfigSender extends MulticastBase {
 	private static Logger logger = Logger.getLogger(ConfigSender.class);
 	
+	private DatagramSocket socket = null;
 	private DatagramPacket packet = null;
 	
 	public boolean initSender() {
-		
 		try {
 			if (initMulticast()) {
-				msocket.setNetworkInterface(NetworkInterface.getByInetAddress(InetAddress.getLocalHost()));
+				socket = new DatagramSocket();
+			} else  {
+				return false;
 			}
 		} catch (IOException e) {
 			logger.error("Error initializing multicast.", e);
@@ -53,7 +54,7 @@ public class ConfigSender extends MulticastBase {
 	}
 	
 	public void send() throws IOException {
-		msocket.send(packet);
+		socket.send(packet);
 	}
 	
 }
