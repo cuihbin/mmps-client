@@ -1,12 +1,7 @@
 package com.zzvc.mmps.launcher.configurator;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.net.DatagramPacket;
 import java.net.MulticastSocket;
 import java.net.SocketTimeoutException;
@@ -25,28 +20,25 @@ public class ConfigReceiver extends MulticastBase {
 	private MulticastSocket socket;
 	private DatagramPacket packet;
 	
-	private ResourceBundle configResource;
-	
 	public boolean receive() {
 		initReceiver();
 		return doReceive();
 	}
 	
 	public ResourceBundle getConfigResource() {
-		return configResource;
+		try {
+			return new PropertyResourceBundle(new FileReader(getConfigPath()));
+		} catch (IOException e) {
+			logger.error("Error loading config", e);
+			throw new ConfigException("Error loading config", e);
+		}
 	}
 	
 	private void initReceiver() {
 		try {
-			try {
-				configResource = new PropertyResourceBundle(new FileReader(getConfigPath()));
-			} catch (FileNotFoundException e) {
-			} catch (IOException e) {
-			}
-			
 			initMulticast();
 			socket = new MulticastSocket(getPort());
-			socket.joinGroup(group);
+			socket.joinGroup(getGroup());
 			socket.setSoTimeout(getPeriod() * 2);
 		} catch (IOException e) {
 			logger.error("Error initializing multicast", e);
@@ -68,32 +60,19 @@ public class ConfigReceiver extends MulticastBase {
 		} finally {
 			if (socket != null) {
 				try {
-					socket.leaveGroup(group);
+					socket.leaveGroup(getGroup());
 					socket.close();
 				} catch (IOException e) {
 				}
 			}
 		}
 		
-		File configFile = new File(getConfigPath());
-		OutputStream os = null;
 		try {
-			configResource = new PropertyResourceBundle(new ByteArrayInputStream(packet.getData(), 0, packet.getLength()));
-
-			os = new FileOutputStream(configFile);
-			os.write(packet.getData(), 0, packet.getLength());
-			
+			writeConfig(packet.getData(), packet.getLength());
 			return true;
 		} catch (IOException e) {
 			logger.info("Error writing multicast data to file.", e);
 			throw new ConfigException("Error writing multicast data to file.", e);
-		} finally {
-			if (os != null) {
-				try {
-					os.close();
-				} catch (IOException e) {
-				}
-			}
 		}
 	}
 }

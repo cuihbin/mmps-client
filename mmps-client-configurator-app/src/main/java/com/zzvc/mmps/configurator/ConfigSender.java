@@ -1,7 +1,5 @@
 package com.zzvc.mmps.configurator;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.DatagramPacket;
@@ -28,13 +26,8 @@ public class ConfigSender extends MulticastBase {
 		
 		InputStream is = null;
 		try {
-			is = new FileInputStream(getConfigPath());
-			byte[] buf = new byte[8192];
-			int bufLen = is.read(buf);
-			packet = new DatagramPacket(buf, bufLen, group, getPort());
-		} catch (FileNotFoundException e) {
-			logger.error("Configurator data file not found.", e);
-			return false;
+			byte[] buf = readConfig();
+			packet = new DatagramPacket(buf, buf.length, getGroup(), getPort());
 		} catch (IOException e) {
 			logger.error("Configurator data reading error.", e);
 			return false;
