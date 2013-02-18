@@ -9,6 +9,8 @@ import com.zzvc.mmps.task.TaskSupport;
 public class ClientConfigTask extends TaskSupport {
 	@Autowired
 	private ClientUpdaterTask autoUpdateTask;
+	
+	volatile private boolean closed = false;
 
 	public ClientConfigTask() {
 		super();
@@ -22,6 +24,10 @@ public class ClientConfigTask extends TaskSupport {
 		ConfigReceiver configReceiver = new ConfigReceiver();
 		try {
 			while (!configReceiver.receive()) {
+				if (closed) {
+					errorMessage("client.launcher.configurator.error.loadfailed");
+					return;
+				}
 				infoMessage("client.launcher.configurator.retry");
 			}
 		} catch (ConfigException e) {
@@ -36,4 +42,8 @@ public class ClientConfigTask extends TaskSupport {
 		}
 	}
 
+	@Override
+	public void preDestroy() {
+		closed = true;
+	}
 }

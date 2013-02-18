@@ -1,3 +1,7 @@
+mmps-client-2.1
+ + Upgrade mmps-core 2.2
+ + Fixed client launcher cannot exit while trying to receive configure
+
 mmps-client-2.0
  + Improved client updater
  + Client download lib changed to commons-vfs

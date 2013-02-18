@@ -14,7 +14,7 @@
   <name>mmps-client</name>
 
   <properties>
-    <mmps-core.version>2.1</mmps-core.version>
+    <mmps-core.version>2.2-SNAPSHOT</mmps-core.version>
     <mmps-remoting.version>2.1</mmps-remoting.version>
   </properties>
 
