@@ -3,7 +3,8 @@ package com.zzvc.mmps.launcher.configurator;
 public class ConfigException extends RuntimeException {
 	private static final long serialVersionUID = 1L;
 
-	public ConfigException() {		super();
+	public ConfigException() {
+		super();
 	}
 
 	public ConfigException(String message) {
@@ -14,8 +15,8 @@ public class ConfigException extends RuntimeException {
 		super(cause);
 	}
 
-    public ConfigException(String message, Throwable cause) {
-    	super(message, cause);
-    }
+	public ConfigException(String message, Throwable cause) {
+		super(message, cause);
+	}
 
 }

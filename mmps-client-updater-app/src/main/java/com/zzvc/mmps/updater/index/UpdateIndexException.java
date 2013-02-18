@@ -3,7 +3,8 @@ package com.zzvc.mmps.updater.index;
 public class UpdateIndexException extends RuntimeException {
 	private static final long serialVersionUID = 1L;
 
-	public UpdateIndexException() {		super();
+	public UpdateIndexException() {
+		super();
 	}
 
 	public UpdateIndexException(String message) {
@@ -14,8 +15,8 @@ public class UpdateIndexException extends RuntimeException {
 		super(cause);
 	}
 
-    public UpdateIndexException(String message, Throwable cause) {
-    	super(message, cause);
-    }
+	public UpdateIndexException(String message, Throwable cause) {
+		super(message, cause);
+	}
 
 }

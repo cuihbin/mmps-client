@@ -3,7 +3,8 @@ package com.zzvc.mmps.launcher.updater;
 public class UpdateServerConnectionException extends RuntimeException {
 	private static final long serialVersionUID = 1L;
 
-	public UpdateServerConnectionException() {		super();
+	public UpdateServerConnectionException() {
+		super();
 	}
 
 	public UpdateServerConnectionException(String message) {
@@ -14,8 +15,8 @@ public class UpdateServerConnectionException extends RuntimeException {
 		super(cause);
 	}
 
-    public UpdateServerConnectionException(String message, Throwable cause) {
-    	super(message, cause);
-    }
+	public UpdateServerConnectionException(String message, Throwable cause) {
+		super(message, cause);
+	}
 
 }

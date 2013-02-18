@@ -3,7 +3,8 @@ package com.zzvc.mmps.launcher.updater;
 public class UpdateFileException extends RuntimeException {
 	private static final long serialVersionUID = 1L;
 
-	public UpdateFileException() {		super();
+	public UpdateFileException() {
+		super();
 	}
 
 	public UpdateFileException(String message) {
@@ -14,8 +15,8 @@ public class UpdateFileException extends RuntimeException {
 		super(cause);
 	}
 
-    public UpdateFileException(String message, Throwable cause) {
-    	super(message, cause);
-    }
+	public UpdateFileException(String message, Throwable cause) {
+		super(message, cause);
+	}
 
 }
